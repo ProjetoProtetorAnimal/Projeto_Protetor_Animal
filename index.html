@@ -8,6 +8,8 @@
     <link href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' rel='stylesheet'>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet'>
     <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <script src="https://smtpjs.com/v3/smtp.js">
+    </script>
     <style>
         ::-webkit-scrollbar {
             width: 8px;
@@ -194,7 +196,8 @@
                         <h5>Suas Informações</h5>
                         <p class="input"><input placeholder="Nome" oninput="this.className = ''" id="nome"></p>
                         <p class="input"><input placeholder="Email" oninput="this.className = ''" id="email"></p>
-                        <p class="input"><input placeholder="Telefone" oninput="this.className = ''" id="telefone"></p>
+                        <p class="input"><input placeholder="Telefone" oninput="this.className = ''" id="telefone"
+                                onkeyup="this.value = this.value.replace(/[^0-9-]/g, '');"></p>
                         <p class="text-center">
                             <input class="form-check-input" type="checkbox" oninput="changeCheckAnonimo()"
                                 aria-label="Checkbox for following text input">
@@ -234,8 +237,7 @@
 
                         <p>
                             <input class="form-check-input" type="checkbox"
-                                aria-label="Checkbox for following text input" id="sol"
-                                onclick="changeDenuncia('sol')">
+                                aria-label="Checkbox for following text input" id="sol" onclick="changeDenuncia('sol')">
                             <label id="sollabel"> Deixar o animal exposto ao sol por longos períodos de tempo</label>
                         </p>
 
@@ -279,8 +281,8 @@
                         </p>
 
                         <div class="form-floating">
-                            <textarea class="form-control" placeholder="Deixe mais alguma descrição"
-                                id="textDescricao" style="height: 100px"></textarea>
+                            <textarea class="form-control" placeholder="Deixe mais alguma descrição" id="textDescricao"
+                                style="height: 100px"></textarea>
                         </div>
                         <br>
                     </div>
@@ -292,7 +294,8 @@
                         <p class="input"><input placeholder="Cidade" disabled value="Canoas">
                         <p class="input"><input placeholder="Rua" oninput="this.className = ''" onblur="actionRua();"
                                 id="textRua" name="uname">
-                        <p class="input"><input id="textNumero" placeholder="Numero" oninput="this.className = ''" name="uname">
+                        <p class="input"><input id="textNumero" placeholder="Numero" oninput="this.className = ''"
+                                name="uname">
                         <p class="input"><input id="textComplemento" placeholder="Complemento">
                         </p>
                     </div>
@@ -318,6 +321,10 @@
     <script type='text/javascript' src='#'></script>
     <script type='text/javascript' src='#'></script>
     <script type='text/javascript' src='#'></script>
+    <script type='text/javascript'>var myLink = document.querySelector('a[href="#"]');
+        myLink.addEventListener('click', function (e) {
+            e.preventDefault();
+        });</script>
     <script type='text/javascript'>
         var currentTab = 0;
         var checkLi = false;
@@ -402,6 +409,27 @@
             };
         }
 
+        function checkMausTratos() {
+            if (
+                abandono == false && medica == false &&
+                agressao == false && preso == false &&
+                sol == false && arejados == false &&
+                higienico == false && estresse == false &&
+                outro == false
+            ) {
+                console.log('aqui 1')
+                alert("Selecione ao menos um dos tipos de maus-tratos")
+                return false
+            }
+            if (outro == true && document.getElementById("textDescricao").value == '') {
+                console.log('aqui 2')
+                alert("Preencha o campo descrição com mais informações do tipo de outros maus-tratos")
+                return false
+            }
+            console.log('aqui 3')
+            return true
+        }
+
         function showTab(n) {
             var x = document.getElementsByClassName("tab");
             x[n].style.display = "block";
@@ -423,7 +451,10 @@
                 return
             }
             var x = document.getElementsByClassName("tab");
-            if (n == 1 && !validateFormPessoa()) return false;
+            if (currentTab == 1 && n == 1 && !validateFormPessoa()) return false;
+            if (currentTab == 2 && n == 1 && !checkMausTratos()) {
+                console.log('aqui 4')
+                return false};
             x[currentTab].style.display = "none";
             currentTab = currentTab + n;
             if (currentTab >= x.length) {
@@ -435,7 +466,7 @@
                 sendMail();
 
             }
-            console.log(currentTab);
+            console.log();
             showTab(currentTab);
         }
 
@@ -551,80 +582,64 @@
                 + (currentdate.getMonth() + 1) + "/"
                 + currentdate.getFullYear() + " @ "
                 + currentdate.getHours() + ":"
-                + currentdate.getMinutes();
-            var message = '<h3>Denuncia</h3></br>'
-            var message = + '<h5>Dados Pessoais:</h5>'
+                + ('0'+currentdate.getMinutes()).slice(-2);
+            var message = 'Denúncia ' +  datetime + '</br></br>\n'
+            message += 'Dados Pessoais:\n'
             if (checkAnonimo == true) {
-                var message = + '<h6>Anônimo</h6></br>'
+                 message += 'Anônimo</br></br>\n'
             } else {
-                var message = + '<h6>Nome: ' + document.getElementById("nome") + '</h6>'
-                var message = + '<h6>Email: ' + document.getElementById("email") + '</h6>'
-                var message = + '<h6>Telefone: ' + document.getElementById("telefone") + '</h6></br>'
+                 message += 'Nome: ' + document.getElementById("nome").value + '</br>\n'
+                 message += 'Email: ' + document.getElementById("email").value + '</br>\n'
+                 message += 'Telefone: ' + document.getElementById("telefone").value + '</br></br>\n'
             }
-            var message = + '<h5>Tipos de maus-tratos:</h5>'
+             message += 'Tipos de maus-tratos:</br>\n'
             if (abandono == true) {
-                var message = + '<h6> - ' + document.getElementById("abandonolabel").innerText + '</h6>'
+                 message += ' - ' + document.getElementById("abandonolabel").innerText + '</br>\n'
             }
             if (medica == true) {
-                var message = + '<h6> - ' + document.getElementById("medicalabel").innerText + '</h6>'
+                 message += ' - ' + document.getElementById("medicalabel").innerText + '</br>\n'
             }
             if (agressao == true) {
-                var message = + '<h6> - ' + document.getElementById("agressaolabel").innerText + '</h6>'
+                 message += ' - ' + document.getElementById("agressaolabel").innerText + '</br>\n'
             }
             if (preso == true) {
-                var message = + '<h6> - ' + document.getElementById("presolabel").innerText + '</h6>'
+                 message += ' - ' + document.getElementById("presolabel").innerText + '</br>\n'
             }
             if (sol == true) {
-                var message = + '<h6> - ' + document.getElementById("sollabel").innerText + '</h6>'
+                 message += ' - ' + document.getElementById("sollabel").innerText + '</br>\n'
             }
             if (arejados == true) {
-                var message = + '<h6> - ' + document.getElementById("arejadoslabel").innerText + '</h6>'
+                 message += ' - ' + document.getElementById("arejadoslabel").innerText + '</br>\n'
             }
             if (higienico == true) {
-                var message = + '<h6> - ' + document.getElementById("higienicolabel").innerText + '</h6>'
+                 message += ' - ' + document.getElementById("higienicolabel").innerText + '</br>\n'
             }
             if (tarefas == true) {
-                var message = + '<h6> - ' + document.getElementById("tarefaslabel").innerText + '</h6>'
+                 message += ' - ' + document.getElementById("tarefaslabel").innerText + '</br>\n'
             }
             if (estresse == true) {
-                var message = + '<h6> - ' + document.getElementById("estresselabel").innerText + '</h6>'
+                 message += ' - ' + document.getElementById("estresselabel").innerText + '</br>\n'
             }
             if (outro == true) {
-                var message = + '<h6> - ' + document.getElementById("outrolabel").innerText + '</h6>'
+                 message += ' - ' + document.getElementById("outrolabel").innerText + '</br>\n'
             }
-            var message = + '<h6>Descrição: ' + document.getElementById("textDescricao").innerText + '</h6></br>'
-            var message = + '<h5>Endereço da denúncia </h5>'
-            var message = + '<h6>CEP: ' + document.getElementById("textCEP").innerText + '</h6>'
-            var message = + '<h6>Rua: ' + document.getElementById("textRua").innerText + '</h6>'
-            var message = + '<h6>Numero: ' + document.getElementById("textNumero").innerText + '</h6>'
-            var message = + '<h6>Complemento: ' + document.getElementById("textComplemento").innerText + '</h6>'
+             message += 'Descrição: ' + document.getElementById("textDescricao").value + '</br></br>\n'
+             message += 'Endereço da denúncia \n'
+             message += 'CEP: ' + document.getElementById("textCEP").value + '</br>\n'
+             message += 'Rua: ' + document.getElementById("textRua").value + '</br>\n'
+             message += 'Numero: ' + document.getElementById("textNumero").value + '</br>\n'
+             message += 'Complemento: ' + document.getElementById("textComplemento").value + '</br>\n'
 
-            const data = JSON.stringify({
-                "Messages": [{
-                    "From": { "Email": "projetoprotetoranimal@gmail.com", "Name": "projetoprotetoranimal" },
-                    "To": [{ "Email": "projetoprotetoranimal@gmail.com", "Name": "projetoprotetoranimal" }],
-                    "Subject": "Denuncia " + datetime,
-                    "TextPart": message
-                }]
+            Email.send({
+                SecureToken: "c96a15a2-0e1e-4a48-b8f3-546c8507381c",
+                To: 'luiscasagrande@hotmail.com.br',
+                From: "projetoprotetoranimal@gmail.com",
+                Subject: "Denúncia " + datetime,
+                Body: message
             });
-
-            const requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: data,
-            };
-
-            fetch("https://api.mailjet.com/v3.1/send", requestOptions)
-                .then(response => response.text())
-                .then(result => console.log(result))
-                .catch(error => console.log('error', error));
         }
 
     </script>
-    <script type='text/javascript'>var myLink = document.querySelector('a[href="#"]');
-        myLink.addEventListener('click', function (e) {
-            e.preventDefault();
-        });</script>
 
 </body>
 
