@@ -191,7 +191,7 @@
 
                     </div>
                     <div class="tab">
-                        <h6>Suas Informações</h6>
+                        <h5>Suas Informações</h5>
                         <p class="input"><input placeholder="Nome" oninput="this.className = ''" id="nome"></p>
                         <p class="input"><input placeholder="Email" oninput="this.className = ''" id="email"></p>
                         <p class="input"><input placeholder="Telefone" oninput="this.className = ''" id="telefone"></p>
@@ -202,89 +202,98 @@
                         </p>
                     </div>
                     <div class="tab">
-                        <h6>Que tipo de maus-tratos você deseja denunciar?</h6>
+                        <h5>Que tipo de maus-tratos você deseja denunciar?</h5>
 
                         <p>
                             <input class="form-check-input" type="checkbox"
-                                aria-label="Checkbox for following text input">
-                            <label for="check"> Abandono</label>
+                                aria-label="Checkbox for following text input" id="abandono"
+                                onclick="changeDenuncia('abandono')">
+                            <label id="abandonolabel"> Abandono</label>
                         </p>
 
                         <p>
                             <input class="form-check-input" type="checkbox"
-                                aria-label="Checkbox for following text input">
-                            <label for="check"> Falta de assistência médica-veterinária</label>
+                                aria-label="Checkbox for following text input" id="medica"
+                                onclick="changeDenuncia('medica')">
+                            <label id="medicalabel"> Falta de assistência médica-veterinária</label>
                         </p>
 
                         <p>
                             <input class="form-check-input" type="checkbox"
-                                aria-label="Checkbox for following text input">
-                            <label for="check"> Agressões físicas</label>
+                                aria-label="Checkbox for following text input" id="agressao"
+                                onclick="changeDenuncia('agressao')">
+                            <label id="agressaolabel"> Agressões físicas</label>
                         </p>
 
                         <p>
                             <input class="form-check-input" type="checkbox"
-                                aria-label="Checkbox for following text input">
-                            <label for="check"> Manter o animal preso a correntes ou cordas</label>
+                                aria-label="Checkbox for following text input" id="preso"
+                                onclick="changeDenuncia('preso')">
+                            <label id="presolabel"> Manter o animal preso a correntes ou cordas</label>
                         </p>
 
                         <p>
                             <input class="form-check-input" type="checkbox"
-                                aria-label="Checkbox for following text input">
-                            <label for="check"> Deixar o animal exposto ao sol por longos períodos de tempo</label>
+                                aria-label="Checkbox for following text input" id="sol"
+                                onclick="changeDenuncia('sol')">
+                            <label id="sollabel"> Deixar o animal exposto ao sol por longos períodos de tempo</label>
                         </p>
 
                         <p>
                             <input class="form-check-input" type="checkbox"
-                                aria-label="Checkbox for following text input">
-                            <label for="check"> Manter o animal em locais não-arejados (sem ventilação ou entrada de
+                                aria-label="Checkbox for following text input" id="arejados"
+                                onclick="changeDenuncia('arejados')">
+                            <label id="arejadoslabel"> Manter o animal em locais não-arejados (sem ventilação ou entrada
+                                de
                                 luz)</label>
                         </p>
 
                         <p>
                             <input class="form-check-input" type="checkbox"
-                                aria-label="Checkbox for following text input">
-                            <label for="check"> Manter os pets em lugares anti-higiênicos</label>
+                                aria-label="Checkbox for following text input" id="higienico"
+                                onclick="changeDenuncia('higienico')">
+                            <label id="higienicolabel"> Manter os pets em lugares anti-higiênicos</label>
                         </p>
 
                         <p>
                             <input class="form-check-input" type="checkbox"
-                                aria-label="Checkbox for following text input">
-                            <label for="check"> Submeter o animal a tarefas exaustivas ou além de suas forças</label>
+                                aria-label="Checkbox for following text input" id="tarefas"
+                                onclick="changeDenuncia('tarefas')">
+                            <label id="tarefaslabel"> Submeter o animal a tarefas exaustivas ou além de suas
+                                forças</label>
                         </p>
 
                         <p>
                             <input class="form-check-input" type="checkbox"
-                                aria-label="Checkbox for following text input">
-                            <label for="check"> Usar animais em espetáculos que possam submetê-los a pânico ou
+                                aria-label="Checkbox for following text input" id="estresse"
+                                onclick="changeDenuncia('estresse')">
+                            <label id="estresselabel"> Usar animais em espetáculos que possam submetê-los a pânico ou
                                 estresse</label>
                         </p>
 
                         <p>
                             <input class="form-check-input" type="checkbox"
-                                aria-label="Checkbox for following text input">
-                            <label for="check"> Outro</label>
+                                aria-label="Checkbox for following text input" id="outro"
+                                onclick="changeDenuncia('outro')">
+                            <label id="outrolabel"> Outro</label>
                         </p>
 
                         <div class="form-floating">
                             <textarea class="form-control" placeholder="Deixe mais alguma descrição"
-                                id="floatingTextarea2" style="height: 100px"></textarea>
+                                id="textDescricao" style="height: 100px"></textarea>
                         </div>
                         <br>
-                        <!-- <p class="input d-none"><input placeholder="Favourite Shopping site"
-                                oninput="this.className = ''" name="email"></p> -->
-
                     </div>
                     <div class="tab">
-                        <h6>Endereço</h6>
+                        <h5>Endereço da denúncia</h5>
                         <p class="input"><input placeholder="CEP" oninput="this.className = ''; actionCEP()"
                                 id="textCEP" name="uname">
                         <p class="input"><input placeholder="Estado" disabled value="RS">
                         <p class="input"><input placeholder="Cidade" disabled value="Canoas">
                         <p class="input"><input placeholder="Rua" oninput="this.className = ''" onblur="actionRua();"
                                 id="textRua" name="uname">
-                        <p class="input"><input placeholder="Numero" oninput="this.className = ''" name="uname">
-                        <p class="input"><input placeholder="Complemento">
+                        <p class="input"><input id="textNumero" placeholder="Numero" oninput="this.className = ''" name="uname">
+                        <p class="input"><input id="textComplemento" placeholder="Complemento">
                         </p>
                     </div>
                     <div class="thanks-message text-center" id="text-message"> <img
@@ -313,6 +322,16 @@
         var currentTab = 0;
         var checkLi = false;
         var checkAnonimo = false;
+        var abandono = false;
+        var medica = false;
+        var agressao = false;
+        var preso = false;
+        var sol = false;
+        var arejados = false;
+        var higienico = false;
+        var tarefas = false;
+        var estresse = false;
+        var outro = false;
         var textCEP = document.getElementById('textCEP');
         var textRua = document.getElementById('textRua');
         document.addEventListener("DOMContentLoaded", function (event) {
@@ -346,6 +365,43 @@
             }
         }
 
+        function changeDenuncia(tipo) {
+            switch (tipo) {
+                case 'abandono':
+                    abandono = !abandono
+                    break;
+                case 'medica':
+                    medica = !medica
+                    break;
+                case 'agressao':
+                    agressao = !agressao
+                    break;
+                case 'preso':
+                    preso = !preso
+                    break;
+                case 'sol':
+                    sol = !sol
+                    break;
+                case 'arejados':
+                    arejados = !arejados
+                    break;
+                case 'higienico':
+                    higienico = !higienico
+                    break;
+                case 'tarefas':
+                    tarefas = !tarefas
+                    break;
+                case 'estresse':
+                    estresse = !estresse
+                    break;
+                case 'outro':
+                    outro = !outro
+                    break;
+                default:
+                    break;
+            };
+        }
+
         function showTab(n) {
             var x = document.getElementsByClassName("tab");
             x[n].style.display = "block";
@@ -367,7 +423,7 @@
                 return
             }
             var x = document.getElementsByClassName("tab");
-            if (n == 1 && !validateForm()) return false;
+            if (n == 1 && !validateFormPessoa()) return false;
             x[currentTab].style.display = "none";
             currentTab = currentTab + n;
             if (currentTab >= x.length) {
@@ -376,16 +432,14 @@
                 document.getElementById("all-steps").style.display = "none";
                 document.getElementById("register").style.display = "none";
                 document.getElementById("text-message").style.display = "block";
-
-
-
+                sendMail();
 
             }
             console.log(currentTab);
             showTab(currentTab);
         }
 
-        function validateForm() {
+        function validateFormPessoa() {
             var x, y, i, valid = true;
             x = document.getElementsByClassName("tab");
             y = x[currentTab].getElementsByTagName("input");
@@ -487,6 +541,85 @@
             xhttp.open('GET', url, true);
             xhttp.send();
         }
+
+        function sendMail() {
+            const myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            myHeaders.set('Authorization', 'Basic ' + btoa('a5d281e10c073dd85b64ee3f6010bc22' + ":" + 'a535dce95239c85ac85652e5a6e20d72'));
+            var currentdate = new Date();
+            var datetime = currentdate.getDate() + "/"
+                + (currentdate.getMonth() + 1) + "/"
+                + currentdate.getFullYear() + " @ "
+                + currentdate.getHours() + ":"
+                + currentdate.getMinutes();
+            var message = '<h3>Denuncia</h3></br>'
+            var message = + '<h5>Dados Pessoais:</h5>'
+            if (checkAnonimo == true) {
+                var message = + '<h6>Anônimo</h6></br>'
+            } else {
+                var message = + '<h6>Nome: ' + document.getElementById("nome") + '</h6>'
+                var message = + '<h6>Email: ' + document.getElementById("email") + '</h6>'
+                var message = + '<h6>Telefone: ' + document.getElementById("telefone") + '</h6></br>'
+            }
+            var message = + '<h5>Tipos de maus-tratos:</h5>'
+            if (abandono == true) {
+                var message = + '<h6> - ' + document.getElementById("abandonolabel").innerText + '</h6>'
+            }
+            if (medica == true) {
+                var message = + '<h6> - ' + document.getElementById("medicalabel").innerText + '</h6>'
+            }
+            if (agressao == true) {
+                var message = + '<h6> - ' + document.getElementById("agressaolabel").innerText + '</h6>'
+            }
+            if (preso == true) {
+                var message = + '<h6> - ' + document.getElementById("presolabel").innerText + '</h6>'
+            }
+            if (sol == true) {
+                var message = + '<h6> - ' + document.getElementById("sollabel").innerText + '</h6>'
+            }
+            if (arejados == true) {
+                var message = + '<h6> - ' + document.getElementById("arejadoslabel").innerText + '</h6>'
+            }
+            if (higienico == true) {
+                var message = + '<h6> - ' + document.getElementById("higienicolabel").innerText + '</h6>'
+            }
+            if (tarefas == true) {
+                var message = + '<h6> - ' + document.getElementById("tarefaslabel").innerText + '</h6>'
+            }
+            if (estresse == true) {
+                var message = + '<h6> - ' + document.getElementById("estresselabel").innerText + '</h6>'
+            }
+            if (outro == true) {
+                var message = + '<h6> - ' + document.getElementById("outrolabel").innerText + '</h6>'
+            }
+            var message = + '<h6>Descrição: ' + document.getElementById("textDescricao").innerText + '</h6></br>'
+            var message = + '<h5>Endereço da denúncia </h5>'
+            var message = + '<h6>CEP: ' + document.getElementById("textCEP").innerText + '</h6>'
+            var message = + '<h6>Rua: ' + document.getElementById("textRua").innerText + '</h6>'
+            var message = + '<h6>Numero: ' + document.getElementById("textNumero").innerText + '</h6>'
+            var message = + '<h6>Complemento: ' + document.getElementById("textComplemento").innerText + '</h6>'
+
+            const data = JSON.stringify({
+                "Messages": [{
+                    "From": { "Email": "projetoprotetoranimal@gmail.com", "Name": "projetoprotetoranimal" },
+                    "To": [{ "Email": "projetoprotetoranimal@gmail.com", "Name": "projetoprotetoranimal" }],
+                    "Subject": "Denuncia " + datetime,
+                    "TextPart": message
+                }]
+            });
+
+            const requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: data,
+            };
+
+            fetch("https://api.mailjet.com/v3.1/send", requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+        }
+
     </script>
     <script type='text/javascript'>var myLink = document.querySelector('a[href="#"]');
         myLink.addEventListener('click', function (e) {
