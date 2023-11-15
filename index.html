@@ -1,7 +1,8 @@
 <!doctype html>
-<html>
+<html lang="pt-BR">
 
 <head>
+    <meta http-equiv="Content-Language" content="pt-br">
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <title>Projeto Protetor Animal</title>
@@ -169,9 +170,12 @@
                     <div class="tab">
                         <h5 class="text-center">Informativo</h5>
                         <p>
-                            O envio desse formulário tem como intenção a criação de uma denúncia de maus-tratos aos animais 
-                            domésticos à Secretaria de Bem Estar Animal do municipio de Canoas. Para mais informações entre em
-                            contato pelo email smbea@canoas.rs.gov.br ou pelos telefones (51) 3429-2924 ou (51) 3427-1169.
+                            O envio desse formulário tem como intenção a criação de uma denúncia de maus-tratos aos
+                            animais
+                            domésticos à Secretaria de Bem Estar Animal do municipio de Canoas. Para mais informações
+                            entre em
+                            contato pelo email smbea@canoas.rs.gov.br ou pelos telefones (51) 3429-2924 ou (51)
+                            3427-1169.
                             Apesar de que alguns alguns Estados e Municípios possuam Leis específicas em relação a isso,
                             no geral, são considerados maus-tratos aos animais domésticos, como cães e gatos:
                         </p>
@@ -288,6 +292,18 @@
                                 style="height: 100px"></textarea>
                         </div>
                         <br>
+                        <p>
+
+                            <label for="fileupload" class="form-label">Carregar uma imagem (opcional)</label>
+                        <div class="input-group mb-3">
+                            <input class="form-control" type="file" id="fileupload" name="fileupload">
+                            <button class="btn btn-outline-secondary" type="button"
+                                onclick="removerFile()">Remover</button>
+                        </div>
+
+
+                        </p>
+                        <br>
                     </div>
                     <div class="tab">
                         <h5>Endereço da denúncia</h5>
@@ -344,12 +360,23 @@
         var outro = false;
         var textCEP = document.getElementById('textCEP');
         var textRua = document.getElementById('textRua');
+        var arquivoNoCampo = false;
+        var arquivoUpload = '';
         document.addEventListener("DOMContentLoaded", function (event) {
-
-
             showTab(currentTab);
-
         });
+
+        const input = document.querySelector('#fileupload')
+        input.addEventListener("change", function () {
+            arquivoUpload = this.files[0];
+            if (arquivoUpload) {
+                arquivoNoCampo = true;
+                console.log(arquivoUpload)
+            } else {
+                arquivoNoCampo = false;
+                console.log(arquivoUpload)
+            }
+        })
 
         function changeCheckLi() {
             checkLi = !checkLi
@@ -457,7 +484,8 @@
             if (currentTab == 1 && n == 1 && !validateFormPessoa()) return false;
             if (currentTab == 2 && n == 1 && !checkMausTratos()) {
                 console.log('aqui 4')
-                return false};
+                return false
+            };
             x[currentTab].style.display = "none";
             currentTab = currentTab + n;
             if (currentTab >= x.length) {
@@ -585,61 +613,98 @@
                 + (currentdate.getMonth() + 1) + "/"
                 + currentdate.getFullYear() + " @ "
                 + currentdate.getHours() + ":"
-                + ('0'+currentdate.getMinutes()).slice(-2);
-            var message = 'Denúncia ' +  datetime + '</br></br>\n'
+                + ('0' + currentdate.getMinutes()).slice(-2);
+            var message = 'Denúncia ' + datetime + '</br></br>\n'
             message += 'Dados Pessoais:\n'
             if (checkAnonimo == true) {
-                 message += 'Anônimo</br></br>\n'
+                message += 'Anônimo</br></br>\n'
             } else {
-                 message += 'Nome: ' + document.getElementById("nome").value + '</br>\n'
-                 message += 'Email: ' + document.getElementById("email").value + '</br>\n'
-                 message += 'Telefone: ' + document.getElementById("telefone").value + '</br></br>\n'
+                message += 'Nome: ' + document.getElementById("nome").value + '</br>\n'
+                message += 'Email: ' + document.getElementById("email").value + '</br>\n'
+                message += 'Telefone: ' + document.getElementById("telefone").value + '</br></br>\n'
             }
-             message += 'Tipos de maus-tratos:</br>\n'
+            message += 'Tipos de maus-tratos:</br>\n'
             if (abandono == true) {
-                 message += ' - ' + document.getElementById("abandonolabel").innerText + '</br>\n'
+                message += ' - ' + document.getElementById("abandonolabel").innerText + '</br>\n'
             }
             if (medica == true) {
-                 message += ' - ' + document.getElementById("medicalabel").innerText + '</br>\n'
+                message += ' - ' + document.getElementById("medicalabel").innerText + '</br>\n'
             }
             if (agressao == true) {
-                 message += ' - ' + document.getElementById("agressaolabel").innerText + '</br>\n'
+                message += ' - ' + document.getElementById("agressaolabel").innerText + '</br>\n'
             }
             if (preso == true) {
-                 message += ' - ' + document.getElementById("presolabel").innerText + '</br>\n'
+                message += ' - ' + document.getElementById("presolabel").innerText + '</br>\n'
             }
             if (sol == true) {
-                 message += ' - ' + document.getElementById("sollabel").innerText + '</br>\n'
+                message += ' - ' + document.getElementById("sollabel").innerText + '</br>\n'
             }
             if (arejados == true) {
-                 message += ' - ' + document.getElementById("arejadoslabel").innerText + '</br>\n'
+                message += ' - ' + document.getElementById("arejadoslabel").innerText + '</br>\n'
             }
             if (higienico == true) {
-                 message += ' - ' + document.getElementById("higienicolabel").innerText + '</br>\n'
+                message += ' - ' + document.getElementById("higienicolabel").innerText + '</br>\n'
             }
             if (tarefas == true) {
-                 message += ' - ' + document.getElementById("tarefaslabel").innerText + '</br>\n'
+                message += ' - ' + document.getElementById("tarefaslabel").innerText + '</br>\n'
             }
             if (estresse == true) {
-                 message += ' - ' + document.getElementById("estresselabel").innerText + '</br>\n'
+                message += ' - ' + document.getElementById("estresselabel").innerText + '</br>\n'
             }
             if (outro == true) {
-                 message += ' - ' + document.getElementById("outrolabel").innerText + '</br>\n'
+                message += ' - ' + document.getElementById("outrolabel").innerText + '</br>\n'
             }
-             message += 'Descrição: ' + document.getElementById("textDescricao").value + '</br></br>\n'
-             message += 'Endereço da denúncia \n'
-             message += 'CEP: ' + document.getElementById("textCEP").value + '</br>\n'
-             message += 'Rua: ' + document.getElementById("textRua").value + '</br>\n'
-             message += 'Número: ' + document.getElementById("textNumero").value + '</br>\n'
-             message += 'Complemento: ' + document.getElementById("textComplemento").value + '</br>\n'
+            message += 'Descrição: ' + document.getElementById("textDescricao").value + '</br></br>\n'
+            message += 'Endereço da denúncia \n'
+            message += 'CEP: ' + document.getElementById("textCEP").value + '</br>\n'
+            message += 'Rua: ' + document.getElementById("textRua").value + '</br>\n'
+            message += 'Número: ' + document.getElementById("textNumero").value + '</br>\n'
+            message += 'Complemento: ' + document.getElementById("textComplemento").value + '</br>\n'
 
-            Email.send({
-                SecureToken: "c96a15a2-0e1e-4a48-b8f3-546c8507381c",
-                To: 'projetoprotetoranimal@gmail.com',
-                From: "projetoprotetoranimal@gmail.com",
-                Subject: "Denúncia " + datetime,
-                Body: message
+            if (arquivoNoCampo) {
+                var file = arquivoUpload;
+                var reader = new FileReader();
+                reader.readAsBinaryString(file);
+                reader.onload = function () {
+                    var dataUri = "data:" + file.type + ";base64," + btoa(reader.result);
+                    Email.send({
+                        SecureToken: "c96a15a2-0e1e-4a48-b8f3-546c8507381c",
+                        To: 'projetoprotetoranimal@gmail.com',
+                        From: "projetoprotetoranimal@gmail.com",
+                        Subject: "Denúncia " + datetime,
+                        Body: message,
+                        Attachments: [
+                            {
+                                name: file.name,
+                                data: dataUri
+                            }]
+                    });
+                }
+
+            } else {
+                Email.send({
+                    SecureToken: "c96a15a2-0e1e-4a48-b8f3-546c8507381c",
+                    To: 'projetoprotetoranimal@gmail.com',
+                    From: "projetoprotetoranimal@gmail.com",
+                    Subject: "Denúncia " + datetime,
+                    Body: message
+                });
+            }
+        }
+
+
+        function saveFile() {
+            var form = document.getElementById("formupload")
+            fetch(form.action, {
+                method: 'post',
+                body: FormData(form)
             });
+        }
+
+        function removerFile() {
+            input.value = "";
+            arquivoUpload = '';
+            arquivoNoCampo = false;
         }
 
     </script>
