@@ -10,5 +10,3 @@ Integrantes do grupo:
 - LUÍS MATHEUS CASAGRANDE
 - JULIA FONTANA
 ----------------------------------
-Drive com documentos do grupo:
-https://drive.google.com/drive/folders/1tc6jMUmWCOnbsa5jqEGmzt5TBOCt5QgM
