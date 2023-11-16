@@ -347,7 +347,8 @@
 
                                 </div>
                                 <br>
-                                <button class="btn btn-outline-secondary" style="margin-top: 7px" id="capture">Tirar foto</button>
+                                <button class="btn btn-outline-secondary" style="margin-top: 7px" id="capture">Tirar
+                                    foto</button>
                             </div>
 
                             <canvas id="canvas" class="canvas"></canvas>
@@ -421,6 +422,38 @@
         var arquivoNoCampo = false;
         var arquivoUpload = '';
         var fotoDaCamera = false;
+
+        const isUserUsingMobile = () => {
+
+            // User agent string method
+            let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            // Screen resolution method
+            if (!isMobile) {
+                let screenWidth = window.screen.width;
+                let screenHeight = window.screen.height;
+                isMobile = (screenWidth < 768 || screenHeight < 768);
+            }
+
+            // Touch events method
+            if (!isMobile) {
+                isMobile = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+            }
+
+            // CSS media queries method
+            if (!isMobile) {
+                let bodyElement = document.getElementsByTagName('body')[0];
+                isMobile = window.getComputedStyle(bodyElement).getPropertyValue('content').indexOf('mobile') !== -1;
+            }
+
+            return isMobile
+        }
+
+
+        navigator.mediaDevices.getUserMedia({ video: isUserUsingMobile() ? { facingMode: { exact: "environment" } } : true, audio: false }).then((stream) => { video.srcObject = stream; video.play(); }).catch((err) => { alert(err); });
+            
+
+        
         document.addEventListener("DOMContentLoaded", function (event) {
             showTab(currentTab);
         });
@@ -661,8 +694,6 @@
         let output = document.getElementById("output");
         let camera = document.getElementById("camera");
 
-        navigator.mediaDevices.getUserMedia({ video: {facingMode:{ exact: "environment" }}, audio: false }).then((stream) => { video.srcObject = stream; video.play(); }).catch((err) => { alert(err); });
-
         video.addEventListener("canplay", function () {
             height = video.videoHeight / (video.videoWidth / width);
 
@@ -676,7 +707,7 @@
             canvas.setAttribute("height", height);
             photo.setAttribute("width", width);
             photo.setAttribute("height", height);
-            
+
         }, false);
 
         capture.addEventListener("click", function (event) {
