@@ -6,7 +6,7 @@
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <title>Projeto Protetor Animal</title>
-    <link rel = "icon" href="icon.png" type="image/x-icon"> 
+    <link rel="icon" href="icon.png" type="image/x-icon">
     <link href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' rel='stylesheet'>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet'>
     <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
@@ -151,6 +151,49 @@
 
         .thanks-message {
             display: none
+        }
+
+        #video {
+            box-shadow: 2px 2px 3px black;
+            width: 320px;
+            height: 240px;
+        }
+
+        #photo {
+            box-shadow: 2px 2px 3px black;
+            width: 320px;
+            height: 240px;
+        }
+
+        #canvas {
+            display: none;
+        }
+
+        .camera {
+            width: 340px;
+            display: inline-block;
+        }
+
+        .output {
+            width: 340px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        #startbutton {
+            display: block;
+            position: relative;
+            margin: 0 auto;
+            bottom: 32px;
+            background-color: rgba(0, 150, 0, 0.5);
+            box-shadow: 0px 0px 1px 2px rgba(0, 0, 0, 0.2);
+            font-size: 14px;
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .content-area {
+            font-size: 16px;
+            width: 760px;
         }
     </style>
 </head>
@@ -301,8 +344,24 @@
                             <button class="btn btn-outline-secondary" type="button"
                                 onclick="removerFile()">Remover</button>
                         </div>
+                        </p>
 
-
+                        <p>
+                            <label class="form-label">Tirar foto pela câmera (opcional)</label>
+                        <div class="content text-center">
+                            <div class="camera" id="camera">
+                                <video id="video">O uso da câmera não foi autorizado.</video>
+                                <br>
+                                <button class="btn btn-outline-secondary" id="capture">Tirar foto</button>
+                            </div>
+                            <canvas id="canvas" class="canvas"></canvas>
+                            <div class="output d-none" id="output">
+                                <img id="photo" />
+                                <br>
+                                <button class="btn btn-outline-secondary" style="margin-top: 7px" id="remove">Remover foto</button>
+                            </div>
+                        </div>
+                        <br>
                         </p>
                         <br>
                     </div>
@@ -363,6 +422,7 @@
         var textRua = document.getElementById('textRua');
         var arquivoNoCampo = false;
         var arquivoUpload = '';
+        var fotoDaCamera = false;
         document.addEventListener("DOMContentLoaded", function (event) {
             showTab(currentTab);
         });
@@ -578,6 +638,67 @@
             }
         }
 
+
+        function saveFile() {
+            var form = document.getElementById("formupload")
+            fetch(form.action, {
+                method: 'post',
+                body: FormData(form)
+            });
+        }
+
+        function removerFile() {
+            input.value = "";
+            arquivoUpload = '';
+            arquivoNoCampo = false;
+        }
+
+        const width = 640;
+        let height = 0;
+        let video = document.getElementById("video");
+        let canvas = document.getElementById("canvas");
+        let photo = document.getElementById("photo");
+        let capture = document.getElementById("capture");
+        let remove = document.getElementById("remove");
+        let output = document.getElementById("output");
+        let camera = document.getElementById("camera");
+
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then((stream) => { video.srcObject = stream; video.play(); }).catch((err) => { alert(err); });
+
+        video.addEventListener("canplay", function () {
+            height = video.videoHeight / (video.videoWidth / width);
+
+            if (isNaN(height)) {
+                height = width / (4 / 3);
+            }
+
+            video.setAttribute("width", width);
+            video.setAttribute("height", height);
+            canvas.setAttribute("width", width);
+            canvas.setAttribute("height", height);
+        }, false);
+
+        capture.addEventListener("click", function (event) {
+            event.preventDefault();
+            const context = canvas.getContext("2d");
+            if (width && height) {
+                video.pause(); canvas.width = width;
+                canvas.height = height; context.drawImage(video, 0, 0, width, height);
+                const data = canvas.toDataURL("image/png");
+                photo.setAttribute("src", data);
+            } video.play();
+            fotoDaCamera = true;
+            camera.classList.add('d-none');
+            output.classList.remove('d-none');
+        }, false);
+
+        remove.addEventListener("click", function (event) {
+            event.preventDefault();
+            fotoDaCamera = false;
+            camera.classList.remove('d-none');
+            output.classList.add('d-none');
+        }, false);
+
         function pesquisarRua(rua) {
             var url = 'https://viacep.com.br/ws/RS/Canoas/' + rua + '/json/';
             console.log(rua)
@@ -605,7 +726,7 @@
             xhttp.send();
         }
 
-        function sendMail() {
+        async function sendMail() {
             const myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
             myHeaders.set('Authorization', 'Basic ' + btoa('a5d281e10c073dd85b64ee3f6010bc22' + ":" + 'a535dce95239c85ac85652e5a6e20d72'));
@@ -662,23 +783,46 @@
             message += 'Número: ' + document.getElementById("textNumero").value + '</br>\n'
             message += 'Complemento: ' + document.getElementById("textComplemento").value + '</br>\n'
 
-            if (arquivoNoCampo) {
-                var file = arquivoUpload;
-                var reader = new FileReader();
-                reader.readAsBinaryString(file);
-                reader.onload = function () {
-                    var dataUri = "data:" + file.type + ";base64," + btoa(reader.result);
+            if (arquivoNoCampo || fotoDaCamera) {
+                var conteudo = []
+                if (fotoDaCamera) {
+                    var arquivoDaFoto = {
+                        name: 'fotoCamera.png',
+                        data: canvas.toDataURL("image/png")
+                    }
+                    await conteudo.push(arquivoDaFoto)
+                }
+                if (arquivoNoCampo) {
+                    var arquvoDoCampo = {};
+                    var file = arquivoUpload;
+                    var reader = new FileReader();
+                    reader.readAsBinaryString(file);
+                    reader.onload = function () {
+
+                        var dataUri = "data:" + file.type + ";base64," + btoa(reader.result);
+                        arquvoDoCampo = {
+                            name: file.name,
+                            data: dataUri
+                        }
+                        conteudo.push(arquvoDoCampo)
+                        Email.send({
+                            SecureToken: "c96a15a2-0e1e-4a48-b8f3-546c8507381c",
+                            To: 'projetoprotetoranimal@gmail.com',
+                            From: "projetoprotetoranimal@gmail.com",
+                            Subject: "Denúncia " + datetime,
+                            Body: message,
+                            Attachments: conteudo
+                        });
+                    };
+                }
+                else {
                     Email.send({
                         SecureToken: "c96a15a2-0e1e-4a48-b8f3-546c8507381c",
                         To: 'projetoprotetoranimal@gmail.com',
                         From: "projetoprotetoranimal@gmail.com",
                         Subject: "Denúncia " + datetime,
                         Body: message,
-                        Attachments: [
-                            {
-                                name: file.name,
-                                data: dataUri
-                            }]
+                        Attachments: conteudo
                     });
                 }
 
@@ -692,22 +836,6 @@
                 });
             }
         }
-
-
-        function saveFile() {
-            var form = document.getElementById("formupload")
-            fetch(form.action, {
-                method: 'post',
-                body: FormData(form)
-            });
-        }
-
-        function removerFile() {
-            input.value = "";
-            arquivoUpload = '';
-            arquivoNoCampo = false;
-        }
-
     </script>
 
 </body>
