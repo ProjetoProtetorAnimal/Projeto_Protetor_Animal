@@ -661,7 +661,7 @@
         let output = document.getElementById("output");
         let camera = document.getElementById("camera");
 
-        navigator.mediaDevices.getUserMedia({ video: {facingMode: "environment"}, audio: false }).then((stream) => { video.srcObject = stream; video.play(); }).catch((err) => { alert(err); });
+        navigator.mediaDevices.getUserMedia({ video: {facingMode:{ exact: "environment" }}, audio: false }).then((stream) => { video.srcObject = stream; video.play(); }).catch((err) => { alert(err); });
 
         video.addEventListener("canplay", function () {
             height = video.videoHeight / (video.videoWidth / width);
