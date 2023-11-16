@@ -12,6 +12,8 @@
     <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
     <script src="https://smtpjs.com/v3/smtp.js">
     </script>
+    <script type='text/javascript'
+        src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js'></script>
     <style>
         ::-webkit-scrollbar {
             width: 8px;
@@ -155,30 +157,19 @@
 
         #video {
             box-shadow: 2px 2px 3px black;
-            width: 320px;
-            height: 240px;
         }
 
         #photo {
             box-shadow: 2px 2px 3px black;
-            width: 320px;
-            height: 240px;
         }
 
         #canvas {
             display: none;
         }
 
-        .camera {
-            width: 340px;
-            display: inline-block;
-        }
+        .camera {}
 
-        .output {
-            width: 340px;
-            display: inline-block;
-            vertical-align: top;
-        }
+        .output {}
 
         #startbutton {
             display: block;
@@ -350,16 +341,25 @@
                             <label class="form-label">Tirar foto pela câmera (opcional)</label>
                         <div class="content text-center">
                             <div class="camera" id="camera">
-                                <video id="video">O uso da câmera não foi autorizado.</video>
+                                <div class="embed-responsive embed-responsive-4by3">
+                                    <video class="embed-responsive-item" id="video">O uso da câmera não foi
+                                        autorizado.</video>
+
+                                </div>
                                 <br>
-                                <button class="btn btn-outline-secondary" id="capture">Tirar foto</button>
+                                <button class="btn btn-outline-secondary" style="margin-top: 7px" id="capture">Tirar foto</button>
                             </div>
+
                             <canvas id="canvas" class="canvas"></canvas>
                             <div class="output d-none" id="output">
-                                <img id="photo" />
-                                <br>
-                                <button class="btn btn-outline-secondary" style="margin-top: 7px" id="remove">Remover foto</button>
+                                <div class="embed-responsive embed-responsive-4by3">
+                                    <img class="embed-responsive-item" id="photo" />
+                                    <br>
+                                </div>
+                                <button class="btn btn-outline-secondary" style="margin-top: 7px" id="remove">Remover
+                                    foto</button>
                             </div>
+
                         </div>
                         <br>
                         </p>
@@ -395,8 +395,6 @@
             </div>
         </div>
     </div>
-    <script type='text/javascript'
-        src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js'></script>
     <script type='text/javascript' src='#'></script>
     <script type='text/javascript' src='#'></script>
     <script type='text/javascript' src='#'></script>
@@ -663,7 +661,7 @@
         let output = document.getElementById("output");
         let camera = document.getElementById("camera");
 
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then((stream) => { video.srcObject = stream; video.play(); }).catch((err) => { alert(err); });
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false, facingMode: "environment" }).then((stream) => { video.srcObject = stream; video.play(); }).catch((err) => { alert(err); });
 
         video.addEventListener("canplay", function () {
             height = video.videoHeight / (video.videoWidth / width);
@@ -736,7 +734,7 @@
                 + currentdate.getFullYear() + " @ "
                 + currentdate.getHours() + ":"
                 + ('0' + currentdate.getMinutes()).slice(-2);
-            var message = 'Denúncia ' + datetime + '</br></br>\n'
+            var message = 'Denúncia ' + datetime + '</br></br >\n'
             message += 'Dados Pessoais:\n'
             if (checkAnonimo == true) {
                 message += 'Anônimo</br></br>\n'
