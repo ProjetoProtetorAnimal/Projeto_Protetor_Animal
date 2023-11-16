@@ -712,8 +712,10 @@
             event.preventDefault();
             const context = canvas.getContext("2d");
             if (width && height) {
-                video.pause(); canvas.width = width;
-                canvas.height = height; context.drawImage(video, 0, 0, width, height);
+                video.pause(); 
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight; 
+                context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
                 const data = canvas.toDataURL("image/png");
                 photo.setAttribute("src", data);
             } video.play();
